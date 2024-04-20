@@ -8,6 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     router.beforeEach((to, from, next) => {
         const store = useAuthStore()
         if ((store.getLoginCode !== AUTH_CODE.SUCCESS) && to.path === '/shop') {
+            console.log(next)
             next('/login')
         } else {
             next()

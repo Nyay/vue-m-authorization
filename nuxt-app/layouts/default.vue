@@ -1,7 +1,14 @@
 <template>
-  <div>
-    <AppHeader />
+  <div style="height: 100%">
+    <AppHeader v-if="isShowHeader" />
     <slot />
-    <AppFooter />
   </div>
 </template>
+
+<script setup lang="ts">
+import AppHeader from './AppHeader.vue'
+
+const router = useRouter();
+
+const isShowHeader = computed(() => router.currentRoute.value.name !== 'login')
+</script>

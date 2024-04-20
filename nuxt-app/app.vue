@@ -1,10 +1,10 @@
 <template>
   <div>
-    <NuxtLayout>
-      <v-app>
-        <NuxtPage />
-      </v-app>
-    </NuxtLayout>
+    <v-app style="height: 100vh">
+      <NuxtLayout>
+          <NuxtPage />
+      </NuxtLayout>
+    </v-app>
   </div>
 </template>
 <script setup lang="ts">

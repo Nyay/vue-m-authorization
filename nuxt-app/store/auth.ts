@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', {
     }),
     getters: {
         getLoginCode: (state) => state.loginCode,
+        isAuthenticated: (state) => state.loginCode === AUTH_CODE.SUCCESS,
     },
     actions: {
         async login(email: string, password: string) {
