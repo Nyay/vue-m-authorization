@@ -35,6 +35,8 @@ import { AUTH_CODE } from '~/store/constants';
 const authStore = useAuthStore();
 const router = useRouter();
 
+console.log(router)
+
 const activeInput = ref(true);
 const form = ref();
 const email = ref('');
@@ -58,7 +60,7 @@ const handleLogin = async () => {
   activeInput.value = false;
   await authStore.login(email.value, password.value);
   await form.value.validate();
-  await router.replace('/');
+  router.back()
 }
 
 </script>

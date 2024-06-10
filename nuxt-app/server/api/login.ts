@@ -8,8 +8,6 @@ export default defineEventHandler(async (event) => {
 
     const user = await db.collection('users').findOne({ email: email });
 
-    // console.log(password, user?.password, password === user?.password, await bcrypt.compare(password, user?.password))
-
     if (user && user.password && password === user?.password) {
         console.log(user)
         return { status: 200, message: 'Logged in successfully', token: user._id };
