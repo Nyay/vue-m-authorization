@@ -1,18 +1,18 @@
 import { useCookie } from '#app';
 
 export const useAuth = () => {
-    const authCookie = useCookie('token', { maxAge: 10 });
+	const authCookie = useCookie('token', { maxAge: 10 });
 
-    const useLogin = (token: string) => {
-        authCookie.value = token;
-    };
+	const useLogin = (token: string) => {
+		authCookie.value = token;
+	};
 
-    const useLogout = () => {
-        authCookie.value = null;
-    };
+	const useLogout = () => {
+		authCookie.value = null;
+	};
 
-    return {
-        useLogin,
-        useLogout,
-    };
+	return {
+		useLogin,
+		useLogout,
+	};
 };

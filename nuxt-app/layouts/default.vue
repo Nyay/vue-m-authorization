@@ -1,6 +1,6 @@
 <template>
   <div style="height: 100%">
-    <AppHeader/>
+    <AppHeader style="position: relative"/>
     <slot />
   </div>
 </template>

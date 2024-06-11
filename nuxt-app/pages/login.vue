@@ -45,33 +45,33 @@ const password = ref('');
 const isLoginError = ref(false);
 
 const handleInput = () => {
-  if (isLoginError.value) {
-    isLoginError.value = false;
-    form.value.validate();
-  }
-  return activeInput.value = true;
+	if (isLoginError.value) {
+		isLoginError.value = false;
+		form.value.validate();
+	}
+	return activeInput.value = true;
 };
 
 const emailRules = [
-    (value: string) => value.length < 1 ? 'Email required' : true,
-    () => isLoginError.value ? 'Invalid email or password' : true,
+	(value: string) => value.length < 1 ? 'Email required' : true,
+	() => isLoginError.value ? 'Invalid email or password' : true,
 ];
 
 const passwordRules = [
-    (value: string) => value.length < 1 ? 'Password required' : true,
-    () => !isLoginError.value,
+	(value: string) => value.length < 1 ? 'Password required' : true,
+	() => !isLoginError.value,
 ];
 
 const handleLogin = async () => {
-  await authStore.login(email.value, password.value);
+	await authStore.login(email.value, password.value);
 
-  if (authStore.loginCode === AUTH_CODE.SUCCESS && authStore.getLastLoginToken) {
-    useLogin(authStore.getLastLoginToken);
-    await router.push(redirectStore.getLastRedirect || '/');
-  } else {
-    isLoginError.value = true;
-    form.value.validate();
-  }
+	if (authStore.loginCode === AUTH_CODE.SUCCESS && authStore.getLastLoginToken) {
+		useLogin(authStore.getLastLoginToken);
+		await router.push(redirectStore.getLastRedirect || '/');
+	} else {
+		isLoginError.value = true;
+		form.value.validate();
+	}
 };
 </script>
 

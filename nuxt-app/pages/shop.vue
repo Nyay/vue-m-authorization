@@ -24,10 +24,10 @@ import { useUserStore } from '~/store/users';
 const userStore = useUserStore();
 
 onBeforeMount(() => {
-  userStore.loadUsers();
+	userStore.loadUsers();
 });
 
 definePageMeta({
-  middleware: 'auth'
+	middleware: 'auth'
 });
 </script>

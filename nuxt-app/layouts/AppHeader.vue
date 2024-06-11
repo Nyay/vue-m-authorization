@@ -32,13 +32,13 @@ const token = useCookie('token');
 const redirectStore = useRedirectStore();
 
 const logout = () => {
-  useLogout();
-  router.push('/');
+	useLogout();
+	router.push('/');
 };
 
 const goShop = () => {
-  redirectStore.setLastRedirect('/shop');
-  router.push('/shop');
+	redirectStore.setLastRedirect('/shop');
+	router.push('/shop');
 };
 
 const isLoginPage = computed(() => router.currentRoute.value.name == 'login');
