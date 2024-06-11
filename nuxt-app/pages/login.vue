@@ -8,18 +8,18 @@
             label="Email"
             class="ma-2"
             :rules="emailRules"
-            @update:focused="handleInput"
             required
-        ></v-text-field>
+            @update:focused="handleInput"
+        />
 
         <v-text-field
             v-model="password"
             class="ma-2"
             label="Password"
             :rules="passwordRules"
-            @update:focused="handleInput"
             required
-        ></v-text-field>
+            @update:focused="handleInput"
+        />
 
         <v-btn class="mt-2" type="submit" block>Submit</v-btn>
       </v-form>
