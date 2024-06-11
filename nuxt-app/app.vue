@@ -2,7 +2,7 @@
   <div>
     <v-app style="height: 100vh">
       <NuxtLayout>
-          <NuxtPage />
+        <NuxtPage />
       </NuxtLayout>
     </v-app>
   </div>

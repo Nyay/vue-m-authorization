@@ -8,18 +8,18 @@
             label="Email"
             class="ma-2"
             :rules="emailRules"
-            @update:focused="handleInput"
             required
-        ></v-text-field>
+            @update:focused="handleInput"
+        />
 
         <v-text-field
             v-model="password"
             class="ma-2"
             label="Password"
             :rules="passwordRules"
-            @update:focused="handleInput"
             required
-        ></v-text-field>
+            @update:focused="handleInput"
+        />
 
         <v-btn class="mt-2" type="submit" block>Submit</v-btn>
       </v-form>
@@ -31,11 +31,13 @@
 import { useAuthStore } from '~/store/auth';
 import { useRouter } from '#app';
 import { AUTH_CODE } from '~/store/constants';
+import { useRedirectStore } from '~/store/redirect';
 
 const authStore = useAuthStore();
+const redirectStore = useRedirectStore();
 const router = useRouter();
 
-console.log(router)
+const { useLogin } = useAuth();
 
 const activeInput = ref(true);
 const form = ref();
@@ -57,10 +59,12 @@ const passwordRules = [
 ];
 
 const handleLogin = async () => {
-  activeInput.value = false;
   await authStore.login(email.value, password.value);
-  await form.value.validate();
-  router.back()
+
+  if (authStore.loginCode === AUTH_CODE.SUCCESS && authStore.getLastLoginToken) {
+    useLogin(authStore.getLastLoginToken);
+    await router.push(redirectStore.getLastRedirect || '/');
+  }
 }
 
 </script>

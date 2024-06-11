@@ -1,7 +1,7 @@
 <template>
   <v-container class="mt-16 ">
     <v-row class="h-100" no-gutters>
-      <v-col v-for="user in userStore.getUserList" cols="3">
+      <v-col v-for="user in userStore.getUserList" :key="user.email" cols="3">
         <v-sheet class="pa-2 ma-2">
           <v-card
               :title="user.name"
@@ -19,11 +19,15 @@
   </v-container>
 </template>
 <script setup lang="ts">
-import { useUserStore } from "~/store/users";
+import { useUserStore } from '~/store/users';
 
 const userStore = useUserStore();
 
 onBeforeMount(() => {
   userStore.loadUsers();
+})
+
+definePageMeta({
+  middleware: 'auth'
 })
 </script>

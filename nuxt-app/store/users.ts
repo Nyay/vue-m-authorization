@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import {AUTH_CODE} from "~/store/constants";
 
 interface IUser { email: string, password: string, name: string, _id: string }
 interface IUsersStoreState { userList: IUser[] }
