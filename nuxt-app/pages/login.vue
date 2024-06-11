@@ -1,27 +1,26 @@
 <template>
   <div class="login-container">
     <v-sheet class="mx-auto" width="500">
-      <v-form ref="form" @submit.prevent="handleLogin">
+      <v-form ref="form" class="d-flex flex-column align-center" @submit.prevent="handleLogin">
         <h1 class="ma-2 text-h7">Please Login</h1>
         <v-text-field
             v-model="email"
             label="Email"
-            class="ma-2"
+            class="ma-2 w-100"
             :rules="emailRules"
             required
             @update:focused="handleInput"
         />
-
         <v-text-field
             v-model="password"
-            class="ma-2"
+            class="ma-2 w-100"
             label="Password"
             :rules="passwordRules"
             required
             @update:focused="handleInput"
         />
-
-        <v-btn class="mt-2" type="submit" block>Submit</v-btn>
+        <v-btn v-if="!authStore.isAuthLoading" :disabled="isLoginError" class="mt-2" type="submit" block>Submit</v-btn>
+        <v-progress-circular v-else color="dark-blue" indeterminate :size="44"/>
       </v-form>
     </v-sheet>
   </div>
@@ -43,19 +42,24 @@ const activeInput = ref(true);
 const form = ref();
 const email = ref('');
 const password = ref('');
+const isLoginError = ref(false);
 
 const handleInput = () => {
-  return activeInput.value = true
+  if (isLoginError.value) {
+    isLoginError.value = false;
+    form.value.validate();
+  }
+  return activeInput.value = true;
 };
 
 const emailRules = [
     (value: string) => value.length < 1 ? 'Email required' : true,
-    () => !activeInput.value && authStore.loginCode === AUTH_CODE.INVALID_CREDENTIALS ? 'YOU SHALL NOT PASS!!!' : true,
+    () => isLoginError.value ? 'Invalid email or password' : true,
 ];
 
 const passwordRules = [
     (value: string) => value.length < 1 ? 'Password required' : true,
-    () => !(!activeInput.value && authStore.loginCode === AUTH_CODE.INVALID_CREDENTIALS),
+    () => !isLoginError.value,
 ];
 
 const handleLogin = async () => {
@@ -64,9 +68,11 @@ const handleLogin = async () => {
   if (authStore.loginCode === AUTH_CODE.SUCCESS && authStore.getLastLoginToken) {
     useLogin(authStore.getLastLoginToken);
     await router.push(redirectStore.getLastRedirect || '/');
+  } else {
+    isLoginError.value = true;
+    form.value.validate();
   }
-}
-
+};
 </script>
 
 <style scoped lang="scss">

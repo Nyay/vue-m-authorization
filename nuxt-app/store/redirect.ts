@@ -12,4 +12,4 @@ export const useRedirectStore = defineStore('redirect', {
             this.redirect = page;
         },
     },
-})
+});

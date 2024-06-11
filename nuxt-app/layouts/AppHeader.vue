@@ -2,7 +2,7 @@
   <v-app-bar :elevation="2">
     <v-app-bar-title class="text-overline" @click="() => router.push('/')">Beer store</v-app-bar-title>
 
-    <template #append>
+    <template v-if="!isLoginPage" #append>
       <v-btn
           icon="mdi-store"
           @click="goShop"
@@ -33,13 +33,15 @@ const redirectStore = useRedirectStore();
 
 const logout = () => {
   useLogout();
-  router.push('/')
-}
+  router.push('/');
+};
 
 const goShop = () => {
-  redirectStore.setLastRedirect('/shop')
-  router.push('/shop')
-}
+  redirectStore.setLastRedirect('/shop');
+  router.push('/shop');
+};
+
+const isLoginPage = computed(() => router.currentRoute.value.name == 'login');
 </script>
 
 <style scoped lang="scss">

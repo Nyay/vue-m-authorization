@@ -12,4 +12,4 @@ export default defineEventHandler(async (event) => {
     } else {
         return { status: 400, message: 'Invalid credentials' };
     }
-})
+});

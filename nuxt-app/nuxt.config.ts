@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         config.plugins?.push(vuetify({ autoImport: true }));
-      })
+      });
     },
     '@nuxt/eslint'
   ],
@@ -22,4 +22,4 @@ export default defineNuxtConfig({
     }
   },
   devtools: { enabled: true }
-})
+});
