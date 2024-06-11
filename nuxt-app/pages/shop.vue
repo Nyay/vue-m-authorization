@@ -26,4 +26,8 @@ const userStore = useUserStore();
 onBeforeMount(() => {
   userStore.loadUsers();
 })
+
+definePageMeta({
+  middleware: "auth"
+})
 </script>

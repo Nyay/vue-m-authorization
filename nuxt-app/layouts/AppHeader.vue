@@ -1,16 +1,16 @@
 <template>
   <v-app-bar :elevation="2">
-    <v-app-bar-title class="text-overline">Login store</v-app-bar-title>
+    <v-app-bar-title class="text-overline" @click="() => router.push('/')">Beer store</v-app-bar-title>
 
     <template v-slot:append>
       <v-btn
-          :icon="storeIcon"
-          @click="() => router.push('/shop')"
+          icon="mdi-store"
+          @click="goShop"
       ></v-btn>
       <v-btn
-          v-if="authStore.isAuthenticated"
+          v-if="token"
           icon="mdi-logout"
-          @click="handleLogout"
+          @click="logout"
       ></v-btn>
       <v-btn
           v-else
@@ -22,20 +22,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useAuthStore } from '~/store/auth';
+import { useRedirectStore } from "~/store/redirect";
 
-const authStore = useAuthStore();
+const { useLogout } = useAuth();
+
 const router = useRouter();
+const token = useCookie('token');
 
-const storeIcon = computed(() => authStore.isAuthenticated ? "mdi-store" : "mdi-store-off");
+const redirectStore = useRedirectStore();
 
-const handleLogout = () => {
-  authStore.logout();
-  router.replace('/');
+const logout = () => {
+  useLogout();
+  router.push('/')
+}
+
+const goShop = () => {
+  redirectStore.setLastRedirect('/shop')
+  router.push('/shop')
 }
 </script>
 
 <style scoped lang="scss">
-
 </style>
