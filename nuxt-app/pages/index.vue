@@ -5,7 +5,7 @@
         title="The best online beer shop in Belgrade"
         text="( access only to registered users )"
         image="https://img.pikbest.com/origin/09/34/75/07EpIkbEsTeyq.png!sw800"
-    ></v-empty-state>
+    />
   </v-container>
 </template>
 

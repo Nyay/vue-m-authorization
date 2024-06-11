@@ -1,6 +1,6 @@
 import { defineNuxtRouteMiddleware, navigateTo } from '#app';
 
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware(() => {
     const token = useCookie('token');
 
     if (!token.value) {

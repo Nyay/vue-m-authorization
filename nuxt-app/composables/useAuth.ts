@@ -1,4 +1,4 @@
-import { useCookie } from "#app";
+import { useCookie } from '#app';
 
 export const useAuth = () => {
     const authCookie = useCookie('token', { maxAge: 10 });
