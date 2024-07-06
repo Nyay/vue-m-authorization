@@ -1,15 +1,33 @@
 import { defineEventHandler } from 'h3';
 import { connect } from '~/server/mongodb';
+import { AxiosError } from 'axios';
+import { ObjectId } from 'mongodb';
 
 export default defineEventHandler(async (event) => {
-    const { email, password } = await readBody(event);
-    const db = await connect();
+	const { email, password } = await readBody(event);
 
-    const user = await db.collection('users').findOne({ email: email });
+	if (!email || !password) {
+		throw new AxiosError('Email and password are required', '400');
+	}
 
-    if (user && user.password && password === user?.password) {
-        return { status: 200, message: 'Logged in successfully', token: user._id };
-    } else {
-        return { status: 400, message: 'Invalid credentials' };
-    }
-})
+	const dbConnection = await connect();
+	const filter = { email: email, password:  password };
+	const options = {
+		projection: { _id: 1 },
+	};
+
+	let user;
+
+	try {
+		user = await dbConnection.collection('users').findOne(filter, options);
+	} catch (error) {
+		console.error(error);
+		throw new AxiosError('Unable to authenticate, please try again later.', '500');
+	}
+
+	if (user && user._id) {
+		return { token : new ObjectId(user._id).toHexString() };
+	} else {
+		throw new AxiosError('Wrong email or password', '401');
+	}
+});

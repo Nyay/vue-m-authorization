@@ -1,12 +1,20 @@
-import type {Db} from 'mongodb';
-import { MongoClient} from 'mongodb';
+import type { Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 const uri = process.env.MONGODB_URI || '';
 const dbName = process.env.MONGODB_DB_NAME || '';
 
-const client = new MongoClient(uri);
+let dbConnection: Db | null = null;
 
 export async function connect(): Promise<Db> {
-    await client.connect();
-    return client.db(dbName);
+	if (dbConnection) {
+		return dbConnection;
+	}
+
+	const client = new MongoClient(uri);
+	console.info('Making connection to mongodb');
+	await client.connect();
+	dbConnection =  client.db(dbName);
+
+	return dbConnection;
 }

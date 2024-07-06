@@ -1,23 +1,23 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-
-interface IUser { email: string, password: string, name: string, _id: string }
-interface IUsersStoreState { userList: IUser[] }
+import { getCurrentUserInfo } from '~/services';
+import { ServiceStatuses } from '~/enums/serviceStatuses';
+import type { IUser } from '~/types';
+interface IUsersStoreState {
+	currentUserInfo: IUser | null;
+}
 
 export const useUserStore = defineStore('users', {
-    state: ():IUsersStoreState => ({
-        userList: [],
-    }),
-    getters: {
-        getUserList: (state) => state.userList,
-    },
-    actions: {
-        async loadUsers() {
-            const response = await axios.post('/api/users');
+	state: (): IUsersStoreState => ({
+		currentUserInfo: null,
+	}),
+	getters: {},
+	actions: {
+		async loadUserInfo(userId: string) {
+			const response = await getCurrentUserInfo(userId);
 
-            if (response.data) {
-                this.userList = response.data;
-            }
-        }
-    },
-})
+			if (response.status === ServiceStatuses.SUCCESS && response.data) {
+				this.currentUserInfo = response.data;
+			}
+		},
+	},
+});
