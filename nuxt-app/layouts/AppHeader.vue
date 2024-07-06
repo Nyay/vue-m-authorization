@@ -1,48 +1,102 @@
 <template>
-  <v-app-bar :elevation="2">
-    <v-app-bar-title class="text-overline" @click="() => router.push('/')">Beer store</v-app-bar-title>
+	<div>
+		<v-navigation-drawer
+			v-if="userStore.currentUserInfo"
+			v-model="isDrawerOpen"
+			location="right"
+			temporary
+		>
+			<ProfileDrawer
+				:user-name="userStore.currentUserInfo.name"
+				:user-email="userStore.currentUserInfo.email"
+				:user-avatar="userStore.currentUserInfo.avatar"
+				@logout="logout"
+			/>
+		</v-navigation-drawer>
+		<v-app-bar scroll-behavior="hide" :elevation="2">
+			<v-menu>
+				<template #activator="{ props }">
+					<v-btn icon="mdi-menu" v-bind="props" />
+				</template>
+				<v-list class="mt-2 app-menu-dropdown">
+					<v-list-item
+						v-for="(item, i) in menuItems"
+						:key="i"
+						:class="{ active: item.page === route.name }"
+						@click="goToPage(item.page)"
+					>
+						<v-hover>
+							<template #default="{ props }">
+								<v-list-item-title v-bind="props">{{
+									item.title
+								}}</v-list-item-title>
+							</template>
+						</v-hover>
+					</v-list-item>
+				</v-list>
+			</v-menu>
 
-    <template v-if="!isLoginPage" #append>
-      <v-btn
-          icon="mdi-store"
-          @click="goShop"
-      />
-      <v-btn
-          v-if="token"
-          icon="mdi-logout"
-          @click="logout"
-      />
-      <v-btn
-          v-else
-          icon="mdi-login"
-          @click="() => router.push('/login')"
-      />
-    </template>
-  </v-app-bar>
+			<template v-if="!isLoginPage" #append>
+				<v-btn v-if="token" icon="mdi-account-cowboy-hat" @click="openDrawer" />
+				<v-btn v-else icon="mdi-login" @click="goToLogin" />
+			</template>
+		</v-app-bar>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { useRedirectStore } from '~/store/redirect';
-
-const { useLogout } = useAuth();
+import { useRouter, useRoute } from 'vue-router';
+import { useCookie } from '#app';
+import { ref, computed } from 'vue';
+import { useUserStore } from '~/store/users';
 
 const router = useRouter();
-const token = useCookie('token');
+const route = useRoute();
+const token = useCookie<string | null>('auth_token');
 
-const redirectStore = useRedirectStore();
+const userStore = useUserStore();
+
+const isDrawerOpen = ref(false);
+
+const menuItems = ref([
+	{ title: 'Home', page: 'index' },
+	{ title: 'Movies', page: 'movies' },
+]);
+
+const isLoginPage = computed(() => route.name === 'login');
+
+const goToPage = (page: string) => {
+	if (page !== route.name) {
+		router.push(`/${page === 'index' ? '' : page}`);
+	}
+};
+
+const goToLogin = () => {
+	router.push('/login');
+};
+
+const openDrawer = () => {
+	isDrawerOpen.value = true;
+};
 
 const logout = () => {
-  useLogout();
-  router.push('/');
+	token.value = null;
+	isDrawerOpen.value = false;
 };
 
-const goShop = () => {
-  redirectStore.setLastRedirect('/shop');
-  router.push('/shop');
-};
-
-const isLoginPage = computed(() => router.currentRoute.value.name == 'login');
+onBeforeMount(async () => {
+	if (token.value && !userStore.currentUserInfo) {
+		await userStore.loadUserInfo(token.value);
+	}
+});
 </script>
 
 <style scoped lang="scss">
+.app-menu-dropdown {
+	min-width: 100px;
+}
+
+.active > div > div {
+	font-weight: bold;
+}
 </style>

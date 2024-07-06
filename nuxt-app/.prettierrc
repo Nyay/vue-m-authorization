@@ -1,0 +1,9 @@
+{
+  "singleQuote": true,
+  "semi": true,
+  "useTabs": true,
+  "bracketSpacing": true,
+  "arrayBracketSpacing": true,
+  "computedPropertySpacing": true,
+  "spaceBeforeFunctionParen": true
+}
