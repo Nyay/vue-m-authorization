@@ -1,8 +1,6 @@
 <template>
 	<p class="text-h3 mt-16 text-right widget-title">Movie of The Day</p>
-	<v-container
-		class="mt-4 pa-4 bg-grey-lighten-4 rounded pr-16 pl-16 d-flex justify-center align-center film-of-the-day-container"
-	>
+	<AppContainer class="d-flex justify-center align-center">
 		<div v-if="movie" class="d-flex w-100">
 			<div class="w-100 d-flex flex-column justify-center">
 				<p class="text-h4 font-weight-thin">{{ movie.title }}</p>
@@ -17,17 +15,21 @@
 					<span class="font-weight-bold">Directors: </span
 					>{{ movie.directors.join(', ') }}
 				</p>
-				<v-btn class="mt-4 film-info-button" size="small" variant="outlined">
+				<v-btn
+					class="mt-4 film-info-button"
+					size="small"
+					variant="outlined"
+					@click="moreInfoButtonClick"
+				>
 					More info
 				</v-btn>
 			</div>
 			<div>
 				<v-img
-					:aspect-ratio="1"
+					:aspect-ratio="0.8"
 					class="bg-white film-poster"
 					:src="movie.poster || ''"
 					width="200"
-					cover
 				/>
 			</div>
 		</div>
@@ -38,35 +40,33 @@
 			color="grey-lighten-1"
 			indeterminate
 		/>
-	</v-container>
+	</AppContainer>
 </template>
 
 <script setup lang="ts">
 import type { IMovieOfTheDay } from '~/types/movies';
+import AppContainer from '~/components/ui/AppContainer/AppContainer.vue';
 
-defineProps<{ movie: IMovieOfTheDay | null }>();
+const props = defineProps<{ movie: IMovieOfTheDay | null }>();
+
+const router = useRouter();
+
+const moreInfoButtonClick = () => {
+	router.push(`/movie/${props.movie?._id}`);
+};
 </script>
 
 <style lang="scss" scoped>
 .widget-title {
 	animation: text-appear 1s ease-in-out;
 }
-.film-of-the-day-container {
-	height: 250px;
+
+.film-poster {
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	transition: box-shadow 0.3s;
+}
 
-	&:hover {
-		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-	}
-
-	.film-poster {
-		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	}
-
-	.film-info-button {
-		width: 100px;
-	}
+.film-info-button {
+	width: 100px;
 }
 
 @keyframes text-appear {

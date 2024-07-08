@@ -6,7 +6,8 @@ export default defineEventHandler(async () => {
 	const dbConnection = await connect();
 
 	// Mocked film of the day id
-	const filmId = new ObjectId('573a13c4f29313caabd6e307');
+	// const filmId = new ObjectId('573a1390f29313caabcd587d');
+	const filmId = new ObjectId('573a1391f29313caabcd6f98');
 
 	const requestOptions = {
 		projection: {
@@ -16,14 +17,17 @@ export default defineEventHandler(async () => {
 			cast: 1,
 			directors: 1,
 			plot: 1,
-		}
+		},
 	};
 
 	const requestFilters = { _id: filmId };
 
 	try {
-		const dbResponse = await dbConnection.collection('movies').find(requestFilters, requestOptions).toArray();
-		return  dbResponse.map(item => ({
+		const dbResponse = await dbConnection
+			.collection('movies')
+			.find(requestFilters, requestOptions)
+			.toArray();
+		return dbResponse.map((item) => ({
 			...item,
 			_id: new ObjectId(item._id).toHexString() || '',
 		}))[ 0 ];

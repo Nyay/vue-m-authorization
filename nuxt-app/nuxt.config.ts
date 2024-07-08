@@ -6,20 +6,23 @@ export default defineNuxtConfig({
 		transpile: [ 'vuetify' ],
 	},
 
-	modules:[
+	modules: [
 		(_options, nuxt) => {
 			nuxt.hooks.hook('vite:extendConfig', (config) => {
 				config.plugins?.push(vuetify({ autoImport: true }));
 			});
 		},
-		'@nuxt/eslint'
+		'@nuxt/eslint',
 	],
 	vite: {
 		vue: {
 			template: {
 				transformAssetUrls,
-			}
-		}
+			},
+		},
 	},
-	devtools: { enabled: true }
+	devtools: { enabled: true },
+	app: {
+		pageTransition: { name: 'page', mode: 'out-in' },
+	},
 });
