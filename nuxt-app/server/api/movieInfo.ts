@@ -32,6 +32,7 @@ export default defineEventHandler(async (event) => {
 			tomatoes: 1,
 		},
 	};
+
 	const requestFilter = { _id: new ObjectId(movieId) };
 
 	let selectedMovie;

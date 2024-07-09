@@ -34,20 +34,20 @@ const props = defineProps<IMovieCharacteristicProps>();
 const computedMovieCharacteristics = computed(() =>
 	props.movieInfo
 		? [
-				{ characteristic: 'Cast', text: props.movieInfo.cast },
-				{ characteristic: 'Directors', text: props.movieInfo.directors },
-				{ characteristic: 'Writers', text: props.movieInfo.writers },
-				{
-					characteristic: 'Released',
-					text: new Date(props.movieInfo.released || '')
-						.toISOString()
-						.slice(0, 10),
-				},
-				{
-					characteristic: 'Runtime',
-					text: `${props.movieInfo.runtime} minutes`,
-				},
-			]
+			{ characteristic: 'Cast', text: props.movieInfo.cast },
+			{ characteristic: 'Directors', text: props.movieInfo.directors },
+			{ characteristic: 'Writers', text: props.movieInfo.writers },
+			{
+				characteristic: 'Released',
+				text: new Date(props.movieInfo.released || '')
+					.toISOString()
+					.slice(0, 10),
+			},
+			{
+				characteristic: 'Runtime',
+				text: `${props.movieInfo.runtime} minutes`,
+			},
+		]
 		: [],
 );
 </script>

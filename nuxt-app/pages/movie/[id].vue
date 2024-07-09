@@ -10,6 +10,12 @@
 		<MoviePlotContainer :current-movie-info="currentMovieInfo" />
 		<MovieScoresWrapper :current-movie-info="currentMovieInfo" />
 	</v-container>
+	<v-empty-state
+		v-else-if="isMovieInfoLoadingError"
+		headline="Hm... Something went wrong"
+		title="film with such ID not found"
+		icon="mdi-weather-lightning"
+	/>
 	<PageLoader v-else />
 </template>
 
@@ -23,7 +29,7 @@ const route = useRoute();
 
 const movieStore = useMoviesStore();
 
-const { currentMovieInfo } = storeToRefs(movieStore);
+const { currentMovieInfo, isMovieInfoLoadingError } = storeToRefs(movieStore);
 const { loadMovieInfo, resetCurrentMovieInfo } = movieStore;
 
 const computedMovieTitle = computed(

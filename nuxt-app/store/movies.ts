@@ -6,12 +6,14 @@ import type { IMovieInfo, IMovieOfTheDay } from '~/types/movies';
 interface IMovieStore {
 	currentMovieInfo: IMovieInfo | null;
 	movieOfTheDay: IMovieOfTheDay | null;
+	isMovieInfoLoadingError: boolean;
 }
 
 export const useMoviesStore = defineStore('movie', {
 	state: (): IMovieStore => ({
 		currentMovieInfo: null,
 		movieOfTheDay: null,
+		isMovieInfoLoadingError: false,
 	}),
 	getters: {},
 	actions: {
@@ -27,10 +29,13 @@ export const useMoviesStore = defineStore('movie', {
 
 			if (response.status === ServiceStatuses.SUCCESS && response.data) {
 				this.currentMovieInfo = response.data;
+			} else if (response.status === ServiceStatuses.ERROR) {
+				this.isMovieInfoLoadingError = true;
 			}
 		},
 		resetCurrentMovieInfo() {
 			this.currentMovieInfo = null;
+			this.isMovieInfoLoadingError = false;
 		},
 	},
 });
