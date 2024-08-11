@@ -1,24 +1,26 @@
 import { AxiosError } from 'axios';
 import { connect } from '~/server/mongodb';
 import { ObjectId } from 'mongodb';
+import { decryptString } from '~/composables/encryptor';
 
 export default defineEventHandler(async (event) => {
-	const { movieId, commentText, userId } = await readBody(event);
+	const { movieId, commentText } = await readBody(event);
+	const userToken = getCookie(event, 'auth_token');
 
-	if (!movieId && !commentText && !userId) {
+	if (!movieId && !commentText && !userToken) {
 		throw new AxiosError(
-			'Movie ID, comment text and user ID is required',
+			'Movie ID, comment text and user token is required',
 			'400',
 		);
 	}
 
+	const decryptedToken = decryptString(userToken as string);
+
 	const dbConnection = await connect();
 
-	const requestFilter = { _id: new ObjectId(userId) };
+	const requestFilter = { _id: new ObjectId(decryptedToken) };
 
-	let userInfo = await dbConnection.collection('users').findOne(requestFilter);
-
-	console.log(userInfo, movieId, commentText, userId);
+	const userInfo = await dbConnection.collection('users').findOne(requestFilter);
 
 	if (!userInfo) {
 		throw new AxiosError('User not found', '401');

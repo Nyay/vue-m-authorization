@@ -25,4 +25,8 @@ export default defineNuxtConfig({
 	app: {
 		pageTransition: { name: 'page', mode: 'out-in' },
 	},
+	runtimeConfig: {
+		encryptionKey: 'i-love-vue',
+	},
+	compatibilityDate: '2024-08-11',
 });

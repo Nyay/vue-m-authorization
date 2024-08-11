@@ -1,7 +1,7 @@
 <template>
 	<v-container class="d-flex justify-space-between align-end">
 		<p class="text-h5 mt-4 text-left block-title pl-8">User comments</p>
-		<v-btn @click="commentDisplayToggle" :disabled="!token">
+		<v-btn :disabled="!token" @click="commentDisplayToggle">
 			{{
 				!token
 					? 'Sign in to add a comment'

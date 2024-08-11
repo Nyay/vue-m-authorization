@@ -47,12 +47,13 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
 import { useCookie } from '#app';
-import { ref, computed } from 'vue';
+import { ref, computed, onUpdated } from 'vue';
 import { useUserStore } from '~/store/users';
 
 const router = useRouter();
 const route = useRoute();
 const token = useCookie<string | null>('auth_token');
+const computedToken = computed(() => token.value);
 
 const userStore = useUserStore();
 
@@ -85,7 +86,13 @@ const logout = () => {
 };
 
 onBeforeMount(async () => {
-	if (token.value && !userStore.currentUserInfo) {
+	if (computedToken.value && !userStore.currentUserInfo) {
+		await userStore.loadUserInfo();
+	}
+});
+
+onUpdated(async () => {
+	if (computedToken.value && !userStore.currentUserInfo) {
 		await userStore.loadUserInfo();
 	}
 });

@@ -29,10 +29,8 @@ import { useMoviesStore } from '~/store/movies';
 import { storeToRefs } from 'pinia';
 import MovieScoresWrapper from '~/components/MovieScoresWrapper/MovieScoresWrapper.vue';
 import PageLoader from '~/components/ui/PageLoader/PageLoader.vue';
-import { addMovieComment } from '~/services/moviesDataService';
 
 const route = useRoute();
-const token = useCookie('auth_token');
 
 const movieStore = useMoviesStore();
 
@@ -42,7 +40,8 @@ const {
 	currentMovieComments,
 	isMovieCommentsLoadingError,
 } = storeToRefs(movieStore);
-const { loadMovieInfo, loadMovieComments, resetCurrentMovieInfo } = movieStore;
+const { loadMovieInfo, loadMovieComments, resetCurrentMovieInfo, sendComment } =
+	movieStore;
 
 const computedMovieTitle = computed(
 	() => `${currentMovieInfo.value?.title} (${currentMovieInfo.value?.year})`,
@@ -51,13 +50,10 @@ const computedMovieTitle = computed(
 const addCommentButtonClick = async (commentText: string) => {
 	if (typeof route.params.id === 'string') {
 		try {
-			await addMovieComment(
-				route.params.id,
-				commentText,
-				token.value as string,
-			);
-			await loadMovieComments(route.params.id);
-		} catch (error) {}
+			await sendComment(route.params.id, commentText);
+		} catch (error) {
+			console.error(error);
+		}
 	}
 };
 

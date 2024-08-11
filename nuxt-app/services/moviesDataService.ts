@@ -48,13 +48,11 @@ export const getMovieComments = async (
 export const addMovieComment = async (
 	movieId: string,
 	commentText: string,
-	userId: string,
 ): Promise<IServiceResponse<null>> => {
 	try {
 		await axios.post('/api/addComment', {
 			movieId,
 			commentText,
-			userId,
 		});
 		return createResponse(ServiceStatuses.SUCCESS, null);
 	} catch (error) {
