@@ -4,16 +4,16 @@ import { AxiosError } from 'axios';
 import { ObjectId } from 'mongodb';
 
 export default defineEventHandler(async (event) => {
-	const { userId } = await readBody(event);
+	let userToken = getCookie(event, 'auth_token');
 
-	if (!userId) {
+	if (!userToken) {
 		throw new AxiosError('User ID is required', '400');
 	}
 
 	const dbConnection = await connect();
-	const userIdObject = new ObjectId(userId);
+	const userObjectId = new ObjectId(userToken);
 
-	const requestFilter = { _id: userIdObject };
+	const requestFilter = { _id: userObjectId };
 	const requestOptions = {
 		projection: {
 			name: 1,

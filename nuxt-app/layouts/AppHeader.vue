@@ -86,7 +86,7 @@ const logout = () => {
 
 onBeforeMount(async () => {
 	if (token.value && !userStore.currentUserInfo) {
-		await userStore.loadUserInfo(token.value);
+		await userStore.loadUserInfo();
 	}
 });
 </script>

@@ -92,7 +92,7 @@ const handleLogin = async () => {
 	) {
 		const authCookie = useCookie('auth_token', { maxAge: 60 * 60 });
 		authCookie.value = authServiceResponse.data.token;
-		await userStore.loadUserInfo(authServiceResponse.data.token);
+		await userStore.loadUserInfo();
 
 		await router.push('/');
 	} else {
