@@ -9,6 +9,11 @@
 		/>
 		<MoviePlotContainer :current-movie-info="currentMovieInfo" />
 		<MovieScoresWrapper :current-movie-info="currentMovieInfo" />
+		<MovieCommentsWrapper
+			v-if="!isMovieCommentsLoadingError"
+			:movie-comments="currentMovieComments"
+			@add-comment="addCommentButtonClick"
+		/>
 	</v-container>
 	<v-empty-state
 		v-else-if="isMovieInfoLoadingError"
@@ -24,20 +29,41 @@ import { useMoviesStore } from '~/store/movies';
 import { storeToRefs } from 'pinia';
 import MovieScoresWrapper from '~/components/MovieScoresWrapper/MovieScoresWrapper.vue';
 import PageLoader from '~/components/ui/PageLoader/PageLoader.vue';
+import { addMovieComment } from '~/services/moviesDataService';
 
 const route = useRoute();
+const token = useCookie('auth_token');
 
 const movieStore = useMoviesStore();
 
-const { currentMovieInfo, isMovieInfoLoadingError } = storeToRefs(movieStore);
-const { loadMovieInfo, resetCurrentMovieInfo } = movieStore;
+const {
+	currentMovieInfo,
+	isMovieInfoLoadingError,
+	currentMovieComments,
+	isMovieCommentsLoadingError,
+} = storeToRefs(movieStore);
+const { loadMovieInfo, loadMovieComments, resetCurrentMovieInfo } = movieStore;
 
 const computedMovieTitle = computed(
 	() => `${currentMovieInfo.value?.title} (${currentMovieInfo.value?.year})`,
 );
 
+const addCommentButtonClick = async (commentText: string) => {
+	if (typeof route.params.id === 'string') {
+		try {
+			await addMovieComment(
+				route.params.id,
+				commentText,
+				token.value as string,
+			);
+			await loadMovieComments(route.params.id);
+		} catch (error) {}
+	}
+};
+
 onMounted(async () => {
 	if (typeof route.params.id === 'string') {
+		await loadMovieComments(route.params.id);
 		await loadMovieInfo(route.params.id);
 	}
 });

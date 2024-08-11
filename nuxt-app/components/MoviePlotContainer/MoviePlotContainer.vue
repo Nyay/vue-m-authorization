@@ -1,7 +1,7 @@
 <template>
 	<p class="text-h5 mt-4 text-left block-title pl-8">Movie plot</p>
 	<AppContainer>
-		<p class="text-caption font-italic">
+		<p class="text-subtitle-2 font-italic">
 			{{ computedMoviePlot }}
 		</p>
 	</AppContainer>

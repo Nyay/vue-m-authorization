@@ -12,8 +12,8 @@ export const useUserStore = defineStore('users', {
 	}),
 	getters: {},
 	actions: {
-		async loadUserInfo(userId: string) {
-			const response = await getCurrentUserInfo(userId);
+		async loadUserInfo() {
+			const response = await getCurrentUserInfo();
 
 			if (response.status === ServiceStatuses.SUCCESS && response.data) {
 				this.currentUserInfo = response.data;

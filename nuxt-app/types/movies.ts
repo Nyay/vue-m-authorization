@@ -65,3 +65,12 @@ export interface IMovieInfo extends IMovieBase {
 		rotten?: number;
 	};
 }
+
+export interface IMovieComment {
+	_id: string;
+	name: string;
+	email: string;
+	movie_id: string;
+	text: string;
+	date: Date;
+}
