@@ -5,7 +5,7 @@
 			:rules="rules"
 			label="Your comment here"
 			variant="outlined"
-		></v-text-field>
+		/>
 		<v-btn class="mt-1" type="submit"> Submit </v-btn>
 	</v-form>
 </template>

@@ -53,8 +53,8 @@ export const useMoviesStore = defineStore('movie', {
 				this.isMovieCommentsLoadingError = true;
 			}
 		},
-		async sendComment(movieId: string, comment_text: string, userId: string) {
-			const response = await addMovieComment(movieId, comment_text, userId);
+		async sendComment(movieId: string, comment_text: string) {
+			const response = await addMovieComment(movieId, comment_text);
 
 			if (response.status === ServiceStatuses.SUCCESS) {
 				await this.loadMovieComments(movieId);
