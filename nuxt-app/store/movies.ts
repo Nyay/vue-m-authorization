@@ -2,11 +2,18 @@ import { defineStore } from 'pinia';
 import {
 	addMovieComment,
 	getMovieComments,
+	getMovieGenres,
 	getMovieInfo,
 	getMovieOfTheDay,
+	getMoviesByGenre,
 } from '~/services/moviesDataService';
 import { ServiceStatuses } from '~/enums/serviceStatuses';
-import type { IMovieComment, IMovieInfo, IMovieOfTheDay } from '~/types/movies';
+import type {
+	IMovieCard,
+	IMovieComment,
+	IMovieInfo,
+	IMovieOfTheDay,
+} from '~/types/movies';
 
 interface IMovieStore {
 	currentMovieInfo: IMovieInfo | null;
@@ -15,6 +22,9 @@ interface IMovieStore {
 	isMovieCommentsLoadingError: boolean;
 	isMovieInfoLoadingError: boolean;
 	isCommentSendError: boolean;
+	movieGenres: string[];
+	isLoadingMoviesByGenres: boolean;
+	loadedMoviesByGenres: IMovieCard[];
 }
 
 export const useMoviesStore = defineStore('movie', {
@@ -25,6 +35,9 @@ export const useMoviesStore = defineStore('movie', {
 		isMovieCommentsLoadingError: false,
 		isMovieInfoLoadingError: false,
 		isCommentSendError: false,
+		movieGenres: [],
+		isLoadingMoviesByGenres: false,
+		loadedMoviesByGenres: [],
 	}),
 	getters: {},
 	actions: {
@@ -33,6 +46,13 @@ export const useMoviesStore = defineStore('movie', {
 
 			if (response.status === ServiceStatuses.SUCCESS && response.data) {
 				this.movieOfTheDay = response.data;
+			}
+		},
+		async loadMovieGenres() {
+			const response = await getMovieGenres();
+
+			if (response.status === ServiceStatuses.SUCCESS && response.data) {
+				this.movieGenres = response.data;
 			}
 		},
 		async loadMovieInfo(movieId: string) {
@@ -49,6 +69,7 @@ export const useMoviesStore = defineStore('movie', {
 
 			if (response.status === ServiceStatuses.SUCCESS && response.data) {
 				this.currentMovieComments = response.data;
+				this.isMovieCommentsLoadingError = false;
 			} else if (response.status === ServiceStatuses.ERROR) {
 				this.isMovieCommentsLoadingError = true;
 			}
@@ -61,6 +82,15 @@ export const useMoviesStore = defineStore('movie', {
 			} else {
 				this.isCommentSendError = true;
 			}
+		},
+		async loadMoviesByGenres(genre: string) {
+			this.isLoadingMoviesByGenres = true;
+			const response = await getMoviesByGenre(genre);
+
+			if (response.status === ServiceStatuses.SUCCESS && response.data) {
+				this.loadedMoviesByGenres = response.data;
+			}
+			this.isLoadingMoviesByGenres = false;
 		},
 		resetCurrentMovieInfo() {
 			this.currentMovieInfo = null;

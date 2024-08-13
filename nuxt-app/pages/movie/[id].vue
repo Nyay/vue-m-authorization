@@ -10,8 +10,8 @@
 		<MoviePlotContainer :current-movie-info="currentMovieInfo" />
 		<MovieScoresWrapper :current-movie-info="currentMovieInfo" />
 		<MovieCommentsWrapper
-			v-if="!isMovieCommentsLoadingError"
 			:movie-comments="currentMovieComments"
+			:is-comments-loaded="computedIsMovieCommentsLoadingError"
 			@add-comment="addCommentButtonClick"
 		/>
 	</v-container>
@@ -45,6 +45,10 @@ const { loadMovieInfo, loadMovieComments, resetCurrentMovieInfo, sendComment } =
 
 const computedMovieTitle = computed(
 	() => `${currentMovieInfo.value?.title} (${currentMovieInfo.value?.year})`,
+);
+
+const computedIsMovieCommentsLoadingError = computed(
+	() => !isMovieCommentsLoadingError.value,
 );
 
 const addCommentButtonClick = async (commentText: string) => {

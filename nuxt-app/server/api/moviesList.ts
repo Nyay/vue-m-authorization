@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 import { ObjectId } from 'mongodb';
 
 export default defineEventHandler(async () => {
-
 	const dbConnection = await connect();
 
 	const requestOptions = {
@@ -15,12 +14,15 @@ export default defineEventHandler(async () => {
 			plot: 1,
 			imdb: 1,
 			tomatoes: 1,
-		}
+		},
 	};
 
 	try {
-		const dbResponse = await dbConnection.collection('movies').find({}, requestOptions).toArray();
-		return  dbResponse.map(item => ({
+		const dbResponse = await dbConnection
+			.collection('movies')
+			.find({}, requestOptions)
+			.toArray();
+		return dbResponse.map((item) => ({
 			...item,
 			_id: new ObjectId(item._id).toHexString() || '',
 			imdb: {
@@ -30,8 +32,7 @@ export default defineEventHandler(async () => {
 				fresh: item?.tomatoes?.fresh || null,
 			},
 		}));
-	} catch (e) {
-		console.error(e);
+	} catch (error) {
 		throw new AxiosError('Cannot get movies list from DB.', '500');
 	}
 });
