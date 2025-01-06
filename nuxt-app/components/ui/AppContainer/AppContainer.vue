@@ -2,13 +2,12 @@
 	<v-container
 		class="mt-4 pa-4 bg-grey-lighten-4 rounded pr-16 pl-16 d-flex app-container"
 	>
-		<slot/>
+		<slot />
 	</v-container>
 </template>
 <script setup lang="ts"></script>
 <style scoped lang="scss">
 .app-container {
-	//min-height: 250px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	transition: all 0.3s;
 

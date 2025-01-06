@@ -29,7 +29,7 @@ export default defineEventHandler(async (event) => {
 		return await dbConnection
 			.collection('users')
 			.findOne(requestFilter, requestOptions);
-	} catch (e) {
+	} catch (error) {
 		throw new AxiosError('Cannot get users data from DB', '500');
 	}
 });

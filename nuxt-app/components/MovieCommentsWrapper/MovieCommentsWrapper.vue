@@ -15,7 +15,12 @@
 		v-if="isCommentInputDisplayed"
 		@add-comment="submitComment"
 	/>
-	<v-data-iterator class="pb-10" :items="movieComments" :items-per-page="3">
+	<v-data-iterator
+		v-if="computedIsCommentsLoaded"
+		class="pb-10"
+		:items="movieComments"
+		:items-per-page="3"
+	>
 		<template #default="{ items }">
 			<AppContainer
 				v-for="item in items"
@@ -57,6 +62,7 @@
 			</div>
 		</template>
 	</v-data-iterator>
+	<p v-else class="text-center text-h6 mt-8">No Comments Yet...</p>
 </template>
 <script setup lang="ts">
 import AppContainer from '~/components/ui/AppContainer/AppContainer.vue';
@@ -65,9 +71,10 @@ import MovieCommentInput from '~/components/MovieCommentInput/MovieCommentInput.
 
 interface IMovieCommentsWrapperProps {
 	movieComments: IMovieComment[] | [];
+	isCommentsLoaded: boolean;
 }
 
-defineProps<IMovieCommentsWrapperProps>();
+const props = defineProps<IMovieCommentsWrapperProps>();
 
 const emit = defineEmits<{
 	(event: 'addComment', commentText: string): void;
@@ -76,6 +83,7 @@ const emit = defineEmits<{
 const token = useCookie('auth_token');
 
 const isCommentInputDisplayed = ref(false);
+const computedIsCommentsLoaded = computed(() => props.isCommentsLoaded);
 
 const commentDisplayToggle = () => {
 	isCommentInputDisplayed.value = !isCommentInputDisplayed.value;
