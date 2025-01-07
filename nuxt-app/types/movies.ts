@@ -1,3 +1,5 @@
+import type { ObjectId } from 'mongodb';
+
 interface IMovieBase {
 	_id: string;
 	title: string;
@@ -53,6 +55,27 @@ export interface IMovieInfo extends IMovieBase {
 	};
 }
 
+export interface IMovieList {
+  _id: ObjectId;
+  title: string;
+  year: number;
+  plot?: string;
+  genres?: string[];
+  runtime?: number;
+  cast?: string[];
+  directors?: string[];
+  num_mflix_comments?: number;
+  released?: Date;
+  writers?: string[];
+  fullplot?: string;
+  awards?: object;
+  poster?: string;
+  imdb?: object;
+  type?: string;
+  tomatoes?: object;
+  languages?: string[];
+}
+
 export interface IMovieComment {
 	_id: string;
 	name: string;
@@ -60,4 +83,12 @@ export interface IMovieComment {
 	movie_id: string;
 	text: string;
 	date: Date;
+}
+
+export interface IMovieListFilter {
+	genres?: string[];
+	languages?: string[];
+	minYear?: number;
+	maxYear?: number;
+	types?: string[];
 }

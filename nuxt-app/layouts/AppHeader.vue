@@ -62,6 +62,7 @@ const isDrawerOpen = ref(false);
 const menuItems = ref([
 	{ title: 'Home', page: 'index' },
 	{ title: 'Movies', page: 'movies' },
+	{ title: 'Movie list', page: 'list' },
 ]);
 
 const isLoginPage = computed(() => route.name === 'login');

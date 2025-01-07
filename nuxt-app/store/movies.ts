@@ -9,9 +9,9 @@ import {
 } from '~/services/moviesDataService';
 import { ServiceStatuses } from '~/enums/serviceStatuses';
 import type {
-	IMovieCard,
 	IMovieComment,
 	IMovieInfo,
+	IMovieList,
 	IMovieOfTheDay,
 } from '~/types/movies';
 
@@ -24,7 +24,7 @@ interface IMovieStore {
 	isCommentSendError: boolean;
 	movieGenres: string[];
 	isLoadingMoviesByGenres: boolean;
-	loadedMoviesByGenres: IMovieCard[];
+	loadedMoviesByGenres: IMovieList[];
 }
 
 export const useMoviesStore = defineStore('movie', {

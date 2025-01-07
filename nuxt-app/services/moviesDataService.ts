@@ -3,9 +3,10 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import { ServiceStatuses } from '~/enums/serviceStatuses';
 import type {
-	IMovieCard,
 	IMovieComment,
 	IMovieInfo,
+	IMovieList,
+	IMovieListFilter,
 	IMovieOfTheDay,
 } from '~/types/movies';
 
@@ -80,13 +81,27 @@ export const getMovieGenres = async (): Promise<IServiceResponse<string[]>> => {
 
 export const getMoviesByGenre = async (
 	genre: string,
-): Promise<IServiceResponse<IMovieCard[]>> => {
+): Promise<IServiceResponse<IMovieList[]>> => {
 	try {
-		const response = await axios.post('/api/getMoviesByGenre', { genre });
+		const response = await axios.post('/api/movieListV2', { filters: { genres: [ genre ] }, cursor: null });
 		return createResponse(ServiceStatuses.SUCCESS, response.data);
 	} catch (error) {
 		const axiosError = error as AxiosError;
 		const responseStatus = axiosError.response?.data as { message: string };
 		return createResponse(ServiceStatuses.ERROR, [], responseStatus.message);
+	}
+};
+
+export const getMovieList = async (
+	filters?: IMovieListFilter,
+	cursor: number = 0,
+): Promise<IServiceResponse<{ movies: IMovieList[], nextCursor: number } | null>> => {
+	try {
+		const response = await axios.post('/api/movieListV2', { filters, cursor });
+		return createResponse(ServiceStatuses.SUCCESS, response.data);
+	} catch (error) {
+		const axiosError = error as AxiosError;
+		const responseStatus = axiosError.response?.data as { message: string };
+		return createResponse(ServiceStatuses.ERROR, null, responseStatus.message);
 	}
 };
